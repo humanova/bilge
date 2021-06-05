@@ -20,9 +20,6 @@ class EnglishSentimentAnalyzer:
         self.model.save_pretrained(MODEL)
 
     def get_sentiment(self, text):
-        """
-
-        """
         text = preprocess(text)
         sentiments = {}
         output = self.model(**self.tokenizer(text, return_tensors='pt', max_length=512, truncation=True))
