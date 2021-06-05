@@ -1,0 +1,11 @@
+{
+    "db_name" : "",
+    "db_user" : "",
+    "db_password" : "",
+    "db_host" : "",
+    "db_port" : 5432,
+    "sentiment_table_name" : "",
+    "redis_host" : "",
+    "redis_port" : 6379,
+    "redis_db" : ""
+}

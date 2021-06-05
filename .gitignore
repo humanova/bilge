@@ -1,0 +1,7 @@
+models/*
+config.json
+__pycache__
+test.py
+venv
+.vscode
+.idea
