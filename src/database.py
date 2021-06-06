@@ -42,7 +42,7 @@ class Post(PostBaseModel):
 class Sentiment(SentimentBaseModel):
     post_id = ForeignKeyField(Post, backref='sentiment')
     positive = DoubleField()
-    neutral = DoubleField()
+    neutral = DoubleField(null=True)
     negative = DoubleField()
     
 class BilgeDB:

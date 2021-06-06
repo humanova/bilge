@@ -61,7 +61,8 @@ class TurkishSentimentAnalyzer:
 
         for idx, s in enumerate(scores):
             sentiments[self.labels[idx]] = s
-            
+        sentiments['neutral'] = None
+        
         return sentiments
 
     def get_sentiments(self, texts):
