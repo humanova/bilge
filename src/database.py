@@ -40,7 +40,7 @@ class Posts(PostBaseModel):
     language = CharField()
 
 class Sentiment(SentimentBaseModel):
-    post_id = ForeignKeyField(Posts, backref='sentiment')
+    post_id = ForeignKeyField(Posts, backref='sentiment', unique=True)
     positive = DoubleField()
     neutral = DoubleField(null=True)
     negative = DoubleField()
