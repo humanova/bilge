@@ -26,7 +26,7 @@ class SentimentBaseModel(Model):
         database = bilge_db
         db_table = 'sentiment'
 
-class Post(PostBaseModel):
+class Posts(PostBaseModel):
     created_at = DateTimeField()
     updated_at = DateTimeField()
     deleted_at = DateTimeField()
@@ -40,7 +40,7 @@ class Post(PostBaseModel):
     language = CharField()
 
 class Sentiment(SentimentBaseModel):
-    post_id = ForeignKeyField(Post, backref='sentiment')
+    post_id = ForeignKeyField(Posts, backref='sentiment')
     positive = DoubleField()
     neutral = DoubleField(null=True)
     negative = DoubleField()
