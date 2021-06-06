@@ -46,7 +46,7 @@ class Bilge:
             try:
                 analyzer = self.s_analyzer_en if p['Language'] == 'en' else self.s_analyzer_tr
                 sentiment = analyzer.get_sentiment(p['Text'])
-                sentiment['post_id'] = p['Id']
+                sentiment['post_id'] = p['ID']
                 sentiment_data.append(sentiment)
             except Exception as e:
                 print(f'[Bilge] Exception in post_handler() : {e}')
