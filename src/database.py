@@ -78,6 +78,7 @@ class BilgeDB:
     
     def add_post_sentiments(self, sentiments): 
         try:
-            Sentiment.insert_many(sentiments).on_conflict_ignore().execute()
+            with self.db.atomic():
+                Sentiment.insert_many(sentiments).on_conflict_ignore().execute()
         except Exception as e:
             logging.warning(f"[DB] Couldn't insert posts : {e}")
