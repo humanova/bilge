@@ -43,14 +43,21 @@ class Bilge:
         sentiment_data = []
         # calculate the sentiments of the posts
         for p in posts:
-            try:
-                analyzer = self.s_analyzer_en if p['Language'] == 'en' else self.s_analyzer_tr
-                sentiment = analyzer.get_sentiment(p['Text'])
-                sentiment['post_id'] = p['ID']
-                sentiment_data.append(sentiment)
-            except Exception as e:
-                print(f'[Bilge] Exception in post_handler() : {e}')
-                print(f'current post data : {p}')
+            text = sentiment.utils.preprocess(['Text']).strip()
+
+            if len(text) == 0 and "reddit" in p['Text'].lower():
+                text = p['Title']
+            elif len(text) > 0:
+                try:
+                    analyzer = self.s_analyzer_en if p['Language'] == 'en' else self.s_analyzer_tr
+                    sentiment = analyzer.get_sentiment(p['Text'])
+                    sentiment['post_id'] = p['ID']
+                    sentiment_data.append(sentiment)
+                except Exception as e:
+                    print(f'[Bilge] Exception in post_handler() : {e}')
+                    print(f'current post data : {p}')
+            else:
+                continue
         # insert posts to sentiment table
         try:
             self.database.add_post_sentiments(sentiment_data)
