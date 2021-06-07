@@ -4,7 +4,9 @@ import redis
 import json
 
 import database
+from sentiment.utils import preprocess
 from sentiment.analyzers import TurkishSentimentAnalyzer, EnglishSentimentAnalyzer
+
 
 class Bilge:
     def __init__(self, redis_config):
@@ -42,8 +44,9 @@ class Bilge:
         posts = json.loads(post_message['data'])
         sentiment_data = []
         # calculate the sentiments of the posts
+        # (except the ones without any meaningful text)
         for p in posts:
-            text = sentiment.utils.preprocess(['Text']).strip()
+            text = preprocess(p['Text']).strip()
 
             if len(text) == 0 and "reddit" in p['Source'].lower():
                 text = p['Title']
