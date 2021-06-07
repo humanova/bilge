@@ -45,7 +45,7 @@ class Bilge:
         for p in posts:
             text = sentiment.utils.preprocess(['Text']).strip()
 
-            if len(text) == 0 and "reddit" in p['Text'].lower():
+            if len(text) == 0 and "reddit" in p['Source'].lower():
                 text = p['Title']
             elif len(text) > 0:
                 try:
