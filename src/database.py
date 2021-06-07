@@ -3,8 +3,8 @@
 from datetime import timezone
 from psycopg2 import *
 from peewee import * 
-import logging
 import confparser
+from logger import logging
 #logging.basicConfig(level=logging.DEBUG)
 
 config = confparser.get("../config.json")
@@ -53,14 +53,15 @@ class BilgeDB:
             self.init_tables()
 
         except Exception as e:
-            print(f"[Bilge:DB] Couldn't connect to db : {e}")
+            logging.fatal(f"[DB] Couldn't connect to db")
+            raise e
     
     def init_tables(self):
         try:
             self.db.create_tables([Sentiment])
         except Exception as e:
-            print("[Bilge:DB] Couldn't create tables (or tables already exist).")
-            print(e)
+            logging.warning("[DB] Couldn't create tables (or tables already exist).")
+            logging.warning(e)
 
     def add_post_sentiment(self, post_id, positive, neutral, negative):
         try: 
@@ -73,10 +74,10 @@ class BilgeDB:
                 )
                 return post
         except Exception as e:
-            print(f"[Bilge:DB] Couldn't insert post : {e}")
+            logging.warning(f"[DB] Couldn't insert post : {e}")
     
     def add_post_sentiments(self, sentiments): 
         try:
             Sentiment.insert_many(sentiments).on_conflict_ignore().execute()
         except Exception as e:
-            print(f"[Bilge:DB] Couldn't insert posts : {e}")
+            logging.warning(f"[DB] Couldn't insert posts : {e}")

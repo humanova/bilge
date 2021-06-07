@@ -3,10 +3,18 @@
 
 import confparser
 from bilge import Bilge
+import traceback
+
+from logger import logging
 
 if __name__ == "__main__":
     config = confparser.get('../config.json')
     redis_config = {'host': config.redis_host, 'port': config.redis_port, 'db': config.redis_db}
 
-    bilge = Bilge(redis_config)
+    try:
+        bilge = Bilge(redis_config)
+    except Exception as e:
+        traceback.print_tb(e.__traceback__)
+        logging.fatal(f"[Bilge] Couldn't initialize bilge : {e}")
+        quit()
     bilge.start_listening()
