@@ -45,10 +45,10 @@ class Bilge:
         # (except the ones without any meaningful text)
         for p in posts:
             text = preprocess(p['Text']).strip()
-
             if len(text) == 0 and "reddit" in p['Source'].lower():
                 text = p['Title']
-            elif len(text) > 0:
+            
+            if len(text) > 0:
                 try:
                     analyzer = self.s_analyzer_en if p['Language'] == 'en' else self.s_analyzer_tr
                     sentiment = analyzer.get_sentiment(p['Text'])
