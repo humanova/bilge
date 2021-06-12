@@ -1,6 +1,6 @@
 # (c) 2021 Emir Erbasan (humanova)
 
-from datetime import timezone
+from datetime import datetime, timedelta, tzinfo
 from psycopg2 import *
 from peewee import * 
 import confparser
@@ -81,4 +81,18 @@ class BilgeDB:
             with self.db.atomic():
                 Sentiment.insert_many(sentiments).on_conflict_ignore().execute()
         except Exception as e:
-            logging.warning(f"[DB] Couldn't insert posts : {e}")
+            logging.warning(f"[DB] Couldn't insert sentiments : {e}")
+            logging.warning(f"sentiment data : {sentiments}")
+
+    def get_posts_without_sentiment(self, limit:int, before_date=None):
+        before_date = datetime.now() - timedelta(minutes=15) if before_date is None else before_date
+        try:
+            posts = (Posts
+                     .select(Posts.id, Posts.source, Posts.title, Posts.text, Posts.language)
+                     .where(Posts.created_at < before_date)
+                     .join(Sentiment, JOIN.LEFT_OUTER)
+                     .limit(limit)
+                     )
+            return posts
+        except Exception as e: 
+            logging.warning(f"[DB] Couldn't query the posts without sentiment : {e}")
