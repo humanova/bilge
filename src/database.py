@@ -85,7 +85,7 @@ class BilgeDB:
             logging.warning(f"sentiment data : {sentiments}")
 
     def get_posts_without_sentiment(self, limit:int, before_date=None):
-        before_date = datetime.now() - timedelta(minutes=15) if before_date is None else before_date
+        before_date = datetime.now() - timedelta(hours=1) if before_date is None else before_date
         try:
             posts = (Posts
                      .select(Posts.id, Posts.source, Posts.title, Posts.text, Posts.language)
