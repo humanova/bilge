@@ -5,6 +5,6 @@ logging.basicConfig(
     level=logging.INFO,
 
     handlers=[
-        logging.FileHandler("../bilge.log"),
+        logging.FileHandler("bilge.log"),
         logging.StreamHandler()],
     datefmt='%Y-%m-%d %H:%M:%S')

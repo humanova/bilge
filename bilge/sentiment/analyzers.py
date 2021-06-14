@@ -1,7 +1,9 @@
 # (c) 2021 Emir Erbasan (humanova)
 
-from sentiment.utils import preprocess
 from scipy.special import softmax
+
+from bilge.sentiment.utils import preprocess
+
 
 class EnglishSentimentAnalyzer:
     def __init__(self):
@@ -9,10 +11,9 @@ class EnglishSentimentAnalyzer:
             Initialize the sentiment analysis model
         """
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
-        from scipy.special import softmax
         self.labels = ['negative', 'neutral', 'positive']
         
-        MODEL = "../models/cardiffnlp/twitter-roberta-base-sentiment"
+        MODEL = "models/cardiffnlp/twitter-roberta-base-sentiment"
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
         self.model = AutoModelForSequenceClassification.from_pretrained(MODEL)
         
@@ -40,10 +41,10 @@ class TurkishSentimentAnalyzer:
         """
             Initialize the sentiment analysis model
         """
-        from transformers import AutoModelForSequenceClassification, AutoTokenizer, pipeline
+        from transformers import AutoModelForSequenceClassification, AutoTokenizer
         self.labels = ['negative', 'positive']
 
-        MODEL = "../models/savasy/bert-base-turkish-sentiment-cased"
+        MODEL = "models/savasy/bert-base-turkish-sentiment-cased"
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
         self.model = AutoModelForSequenceClassification.from_pretrained(MODEL)
 

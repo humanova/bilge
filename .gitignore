@@ -6,3 +6,4 @@ venv
 *.log
 .vscode
 .idea
+test_data.json
