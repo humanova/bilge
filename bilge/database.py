@@ -94,8 +94,8 @@ class BilgeDB:
         try:
             posts = (Posts
                      .select(Posts.id, Posts.source, Posts.title, Posts.text, Posts.language)
-                     .join(Sentiment, JOIN.LEFT_OUTER)
-                     .join(NLPInapplicability, JOIN.LEFT_OUTER)
+                     .join_from(Posts, Sentiment, JOIN.LEFT_OUTER)
+                     .join_from(Posts, NLPInapplicability, JOIN.LEFT_OUTER)
                      .where((Posts.created_at < before_date) 
                             & (Posts.language.is_null(False)) 
                             & (Posts.language != '') 
