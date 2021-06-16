@@ -34,6 +34,7 @@ def calculate_and_insert_sentiments(posts):
     # calculate the sentiments of the posts
     # (except the ones without any meaningful text)
     sentiment_data = []
+    inapplicable_posts = []
     for p in posts:
         if p['language'] is None:
             continue 
@@ -49,14 +50,22 @@ def calculate_and_insert_sentiments(posts):
                 sentiment['post_id'] = p['id']
                 sentiment_data.append(sentiment)
             except Exception as e:
-                logging.warning(f'[Bilge/Tasks] Could not calculate the sentiment : {e}\ncurrent post data : {p}')
+                logging.warning(f'[Bilge:Tasks] Could not calculate the sentiment : {e}\ncurrent post data : {p}')
                 traceback.print_tb(e.__traceback__)
         else:
+            inapplicable_posts.append({'post_id': p['id']})
             continue
 
     if len(sentiment_data) > 0:
         try:
             database.db.add_post_sentiments(sentiment_data)
         except Exception as e:
-            logging.warning(f'[Bilge] Could not insert the sentiments of the posts : {e}')
+            logging.warning(f'[Bilge:Tasks] Could not insert the sentiments of the posts : {e}')
+            traceback.print_tb(e.__traceback__)
+
+    if len(inapplicable_posts) > 0:
+        try:
+            database.db.add_post_inapplicabilities(inapplicable_posts)
+        except Exception as e:
+            logging.warning(f'[Bilge:Tasks] Could not insert inapplicable post ids: {e}')
             traceback.print_tb(e.__traceback__)
