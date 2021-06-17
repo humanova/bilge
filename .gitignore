@@ -1,4 +1,5 @@
 models/**
+!models/*.py
 config.json
 __pycache__
 test.py
