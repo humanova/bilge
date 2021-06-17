@@ -29,6 +29,10 @@ if IN_CELERY_WORKER_PROCESS:
     tr_sentiment_analyzer = TurkishSentimentAnalyzer()
     en_sentiment_analyzer = EnglishSentimentAnalyzer()
 
+# if these sources doesn't contain a proper 'text' then skip them
+# for other sources, we will try to use their 'title's
+sources_with_inapplicable_titles = ['Twitter', 'Eksisozluk']
+
 @app.task
 def calculate_and_insert_sentiments(posts):
     # calculate the sentiments of the posts
@@ -40,8 +44,9 @@ def calculate_and_insert_sentiments(posts):
             continue 
 
         text = preprocess(p['text']).strip()
-        if len(text) == 0 and "reddit" in p['source'].lower():
-            text = p['title']
+        # try using the post 'title' instead of 'text'
+        if len(text) == 0 and p['source'] not in sources_with_inapplicable_titles:
+            text = preprocess(p['title']).strip()
 
         if len(text) > 0:
             try:
@@ -55,17 +60,13 @@ def calculate_and_insert_sentiments(posts):
         else:
             inapplicable_posts.append({'post_id': p['id']})
             continue
-
+    
+    # insert to sentiment table, delete from nlp_inapplicable
     if len(sentiment_data) > 0:
-        try:
-            database.db.add_post_sentiments(sentiment_data)
-        except Exception as e:
-            logging.warning(f'[Bilge:Tasks] Could not insert the sentiments of the posts : {e}')
-            traceback.print_tb(e.__traceback__)
+        database.db.add_post_sentiments(sentiment_data)
+        database.db.delete_post_nlpinapplicabilities([p['post_id'] for p in sentiment_data])
 
+    # insert to nlp_inapplicable post
     if len(inapplicable_posts) > 0:
-        try:
-            database.db.add_post_inapplicabilities(inapplicable_posts)
-        except Exception as e:
-            logging.warning(f'[Bilge:Tasks] Could not insert inapplicable post ids: {e}')
-            traceback.print_tb(e.__traceback__)
+        database.db.add_post_nlpinapplicabilities(inapplicable_posts)
+        database.db.delete_post_sentiments([p['post_id'] for p in inapplicable_posts])
