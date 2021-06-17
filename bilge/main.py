@@ -47,9 +47,9 @@ class Bilge:
         # handle posts with missing sentiment data
         # query 'limit' number of posts, calculate the sentiments, update the sentiment table
         try:
-            # 500 posts (as dict) in 10 slices
-            posts = [database.post_to_dict(p) for p in database.db.get_posts_without_sentiment(limit=500)]
-            post_slices = [posts[x:x + 50] for x in range(0, len(posts), 50)]
+            # 150 posts (as dict) in 10 slices
+            posts = [database.post_to_dict(p) for p in database.db.get_posts_without_sentiment(limit=150)]
+            post_slices = [posts[x:x + 15] for x in range(0, len(posts), 15)]
 
             for slice in post_slices:
                 calculate_and_insert_sentiments.delay(slice)
