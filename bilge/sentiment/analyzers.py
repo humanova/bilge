@@ -12,11 +12,11 @@ class EnglishSentimentAnalyzer:
         """
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         self.labels = ['negative', 'neutral', 'positive']
-        
+
         MODEL = "models/cardiffnlp/twitter-roberta-base-sentiment"
         self.tokenizer = AutoTokenizer.from_pretrained(MODEL)
         self.model = AutoModelForSequenceClassification.from_pretrained(MODEL)
-        
+
         self.tokenizer.save_pretrained(MODEL)
         self.model.save_pretrained(MODEL)
 
@@ -29,7 +29,7 @@ class EnglishSentimentAnalyzer:
 
         for idx, s in enumerate(scores):
             sentiments[self.labels[idx]] = s
-            
+
         return sentiments
 
     def get_sentiments(self, texts):
@@ -51,7 +51,7 @@ class TurkishSentimentAnalyzer:
         self.tokenizer.save_pretrained(MODEL)
         self.model.save_pretrained(MODEL)
 
-        #self.sentiment_analyzer = pipeline("sentiment-analysis", tokenizer=tokenizer, model=model)
+        # self.sentiment_analyzer = pipeline("sentiment-analysis", tokenizer=tokenizer, model=model)
 
     def get_sentiment(self, text):
         text = preprocess(text)
@@ -63,7 +63,7 @@ class TurkishSentimentAnalyzer:
         for idx, s in enumerate(scores):
             sentiments[self.labels[idx]] = s
         sentiments['neutral'] = None
-        
+
         return sentiments
 
     def get_sentiments(self, texts):

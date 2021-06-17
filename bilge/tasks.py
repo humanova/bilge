@@ -1,7 +1,7 @@
 # (c) 2021 Emir Erbasan (humanova)
 
 import sys
-import traceback 
+import traceback
 
 from celery import Celery
 
@@ -11,14 +11,13 @@ from bilge.logger import logging
 from bilge.sentiment.analyzers import TurkishSentimentAnalyzer, EnglishSentimentAnalyzer
 from bilge.sentiment.utils import preprocess
 
-
 config = bilge.config
 
 app = Celery("bilge", broker=f'redis://{config.redis_host}:{config.redis_port}/{config.redis_db}',
-                      backend=f'redis://{config.redis_host}:{config.redis_port}/{config.redis_db}')
+             backend=f'redis://{config.redis_host}:{config.redis_port}/{config.redis_db}')
 
 IN_CELERY_WORKER_PROCESS = sys.argv \
-                           and sys.argv[0].endswith('celery')\
+                           and sys.argv[0].endswith('celery') \
                            and 'worker' in sys.argv
 
 # init analyzers if we are in a celery worker
@@ -33,6 +32,7 @@ if IN_CELERY_WORKER_PROCESS:
 # for other sources, we will try to use their 'title's
 sources_with_inapplicable_titles = ['Twitter', 'Eksisozluk']
 
+
 @app.task
 def calculate_and_insert_sentiments(posts):
     # calculate the sentiments of the posts
@@ -41,7 +41,7 @@ def calculate_and_insert_sentiments(posts):
     inapplicable_posts = []
     for p in posts:
         if p['language'] is None:
-            continue 
+            continue
 
         text = preprocess(p['text']).strip()
         # try using the post 'title' instead of 'text'
@@ -60,7 +60,7 @@ def calculate_and_insert_sentiments(posts):
         else:
             inapplicable_posts.append({'post_id': p['id']})
             continue
-    
+
     # insert to sentiment table, delete from nlp_inapplicable
     if len(sentiment_data) > 0:
         database.db.add_post_sentiments(sentiment_data)

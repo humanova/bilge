@@ -1,6 +1,7 @@
 import json
 from collections import namedtuple
 
+
 def get(file):
     try:
         with open(file, encoding='utf8') as data:

@@ -23,7 +23,7 @@ class Bilge:
         self.pubsub.psubscribe(**{'new_posts':self.post_handler})
         self.pubsub_thread = self.pubsub.run_in_thread(sleep_time=0.001)
         logging.info('[Bilge] Started listening "new_posts"')
-    
+
     def stop_listening(self):
         # stop listening 'new_posts' pub/sub channel and the pub/sub thread
         if self.pubsub_thread is not None:
@@ -50,7 +50,7 @@ class Bilge:
             # 500 posts (as dict) in 10 slices
             posts = [database.post_to_dict(p) for p in database.db.get_posts_without_sentiment(limit=500)]
             post_slices = [posts[x:x + 50] for x in range(0, len(posts), 50)]
-            
+
             for slice in post_slices:
                 calculate_and_insert_sentiments.delay(slice)
         except Exception as e:
@@ -70,7 +70,7 @@ class Bilge:
                 'timestamp' : post['Timestamp'],
                 'score' : post['Score'],
                 'language' : post['Language']}
-            
+
 
 if __name__ == "__main__":
     import bilge
@@ -79,8 +79,9 @@ if __name__ == "__main__":
     try:
         redis_client = redis.Redis(host= config.redis_host, port=config.redis_port, db=config.redis_db)
         bilge = Bilge(redis_client)
+        bilge.start_listening()
     except Exception as e:
         traceback.print_tb(e.__traceback__)
         logging.fatal(f"[Bilge] Couldn't initialize bilge : {e}")
         quit()
-    bilge.start_listening()
+
