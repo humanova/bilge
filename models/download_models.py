@@ -25,5 +25,5 @@ if __name__ == "__main__":
     print(f"downloading huggingface models : {', '.join(hf_mls)}...")
     dl_pretrained_hf_models(hf_mls)
 
-    print(f"downloading spacy models : {', '.join(hf_mls)}...")
+    print(f"downloading spacy models : {', '.join(sp_mls)}...")
     dl_pretrained_spacy_models(sp_mls)
