@@ -176,8 +176,8 @@ class BilgeDB:
                      .join_from(Posts, NLPInapplicability, JOIN.LEFT_OUTER)
                      .where((Posts.created_at < before_date)
                             & (Posts.language == 'en') # temporary (until the TR NER analyzer)
-                            #& (Posts.language.is_null(False)) commented out until i implement the turkish ner analyzer
-                            & (Posts.language != '')
+                            & (Posts.language.is_null(False))
+                            # & (Posts.language != '') commented out until i implement the turkish ner analyzer
                             & (NamedEntity.id.is_null())
                             & (NLPInapplicability.id.is_null()))
                      .limit(limit)
