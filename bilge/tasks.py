@@ -91,7 +91,7 @@ def calculate_and_insert_named_entities(posts):
     inapplicable_posts = []
     for p in posts:
         # TODO: implement the turkish ner analyzer (research time)
-        if p['language'] is None or p['language'] is 'tr':
+        if p['language'] is None or p['language'] == 'tr':
             continue
 
         # if 'title' and 'text' are applicable for nlp, then use both by concatenating
