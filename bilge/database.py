@@ -47,6 +47,14 @@ class Sentiment(Model):
         database = bilge_db
         db_table = 'sentiment'
 
+class NamedEntity(Model):
+    post_id = ForeignKeyField(Posts, backref='entity')  # not unique since a post may have multiple named entities
+    entity = CharField()
+    label = CharField()
+
+    class Meta:
+        database = bilge_db
+        db_table = 'named_entity'
 
 class NLPInapplicability(Model):
     post_id = ForeignKeyField(Posts, backref='nlp_inapplicability', unique=True)
@@ -69,11 +77,12 @@ class BilgeDB:
 
     def init_tables(self):
         try:
-            self.db.create_tables([Sentiment, NLPInapplicability])
+            self.db.create_tables([Sentiment, NamedEntity, NLPInapplicability])
         except Exception as e:
             logging.warning("[DB] Couldn't create tables (or tables already exist).")
             logging.warning(e)
 
+    # -- sentiment --
     def add_post_sentiment(self, sentiment):
         try:
             with self.db.atomic():
@@ -115,6 +124,31 @@ class BilgeDB:
             logging.warning(f"[DB] Couldn't delete sentiments : {e}")
             logging.warning(f"post ids : {post_ids}")
 
+    # -- named entity --
+    def add_post_named_entity(self, named_entity):
+        try:
+            with self.db.atomic():
+                NamedEntity.insert(**named_entity).execute()
+        except Exception as e:
+            logging.warning(f"[DB] Couldn't insert named entity : {e}")
+
+    def add_post_named_entities(self, named_entities):
+        try:
+            with self.db.atomic():
+                for e in named_entities:
+                    NamedEntity.insert(**e).execute()
+        except Exception as e:
+            logging.warning(f"[DB] Couldn't insert named entities : {e}")
+            logging.warning(f"named entity data : {named_entities}")
+
+    def delete_post_named_entities(self, post_ids):
+        try:
+            with self.db.atomic():
+                NamedEntity.delete().where(NamedEntity.post_id.in_(post_ids)).execute()
+        except Exception as e:
+            logging.warning(f"[DB] Couldn't delete named entities : {e}")
+            logging.warning(f"post ids : {post_ids}")
+
     def get_posts_without_sentiment(self, limit: int, before_date=None):
         before_date = datetime.utcnow() - timedelta(hours=1) if before_date is None else before_date
         try:
@@ -133,6 +167,7 @@ class BilgeDB:
         except Exception as e:
             logging.warning(f"[DB] Couldn't query the posts without sentiment : {e}")
 
+    # -- nlp_inapplicability --
     def add_post_nlpinapplicability(self, post_id):
         try:
             with self.db.atomic():
