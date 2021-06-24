@@ -117,7 +117,7 @@ def calculate_and_insert_named_entities(posts):
             inapplicable_posts.append({'post_id': p['id']})
             continue
 
-    # insert to sentiment table, delete from nlp_inapplicable
+    # insert to named_entity table, delete from nlp_inapplicable
     if len(ner_data) > 0:
         database.db.add_post_named_entities(ner_data)
         database.db.delete_post_nlpinapplicabilities([p['post_id'] for p in ner_data])
