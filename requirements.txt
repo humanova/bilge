@@ -4,3 +4,4 @@ psycopg2-binary==2.8.6
 peewee==3.14.4
 scipy==1.6.3
 celery==5.1.0
+spacy==3.0.6
