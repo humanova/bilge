@@ -8,7 +8,7 @@ import redis
 
 from bilge import database
 from bilge.logger import logging
-from bilge.tasks import calculate_and_insert_sentiments
+from bilge.tasks import calculate_and_insert_sentiments, calculate_and_insert_named_entities
 
 
 class Bilge:
@@ -35,15 +35,16 @@ class Bilge:
     def post_handler(self, post_message):
         # handle pubsub messages : 
         # unmarshal the posts, calculate the sentiments, update the sentiment table
-        self.update_missing_sentiments()
+        self.update_missing_nlp_analysis()
         try:
             posts = [self.redis_post_to_model_dict(p) for p in json.loads(post_message['data'])]
             calculate_and_insert_sentiments.delay(posts)
+            calculate_and_insert_named_entities.delay(slice)
         except Exception as e:
             logging.warning(f'[Bilge] Could not calculate/insert the sentiments of the posts : {e}')
             traceback.print_tb(e.__traceback__)
 
-    def update_missing_sentiments(self):
+    def update_missing_nlp_analysis(self):
         # handle posts with missing sentiment data
         # query 'limit' number of posts, calculate the sentiments, update the sentiment table
         try:
@@ -53,6 +54,8 @@ class Bilge:
 
             for slice in post_slices:
                 calculate_and_insert_sentiments.delay(slice)
+                calculate_and_insert_named_entities.delay(slice)
+
         except Exception as e:
             logging.warning(f'[Bilge] Could not send missing sentiments to the worker : {e}')
             traceback.print_tb(e.__traceback__)
