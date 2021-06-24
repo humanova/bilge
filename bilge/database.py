@@ -167,6 +167,25 @@ class BilgeDB:
         except Exception as e:
             logging.warning(f"[DB] Couldn't query the posts without sentiment : {e}")
 
+    def get_posts_without_named_entity(self, limit: int, before_date=None):
+        before_date = datetime.utcnow() - timedelta(hours=1) if before_date is None else before_date
+        try:
+            posts = (Posts
+                     .select(Posts.id, Posts.source, Posts.title, Posts.text, Posts.language)
+                     .join_from(Posts, NamedEntity, JOIN.LEFT_OUTER)
+                     .join_from(Posts, NLPInapplicability, JOIN.LEFT_OUTER)
+                     .where((Posts.created_at < before_date)
+                            & (Posts.language == 'en') # temporary (until the TR NER analyzer)
+                            #& (Posts.language.is_null(False)) commented out until i implement the turkish ner analyzer
+                            & (Posts.language != '')
+                            & (NamedEntity.id.is_null())
+                            & (NLPInapplicability.id.is_null()))
+                     .limit(limit)
+                     )
+            return posts
+        except Exception as e:
+            logging.warning(f"[DB] Couldn't query the posts without named entities : {e}")
+
     # -- nlp_inapplicability --
     def add_post_nlpinapplicability(self, post_id):
         try:

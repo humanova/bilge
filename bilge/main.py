@@ -49,11 +49,15 @@ class Bilge:
         # query 'limit' number of posts, calculate the sentiments, update the sentiment table
         try:
             # 150 posts (as dict) in 10 slices
-            posts = [database.post_to_dict(p) for p in database.db.get_posts_without_sentiment(limit=150)]
-            post_slices = [posts[x:x + 15] for x in range(0, len(posts), 15)]
+            s_posts = [database.post_to_dict(p) for p in database.db.get_posts_without_sentiment(limit=150)]
+            n_posts = [database.post_to_dict(p) for p in database.db.get_posts_without_named_entity(limit=150)]
+            sentiment_slices = [s_posts[x:x + 15] for x in range(0, len(s_posts), 15)]
+            ner_slices = [n_posts[x:x + 15] for x in range(0, len(n_posts), 15)]
 
-            for slice in post_slices:
+            for slice in sentiment_slices:
                 calculate_and_insert_sentiments.delay(slice)
+
+            for slice in ner_slices:
                 calculate_and_insert_named_entities.delay(slice)
 
         except Exception as e:
