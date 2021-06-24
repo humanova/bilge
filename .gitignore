@@ -7,4 +7,5 @@ venv
 *.log
 .vscode
 .idea
+*.ipynb
 test_data.json
