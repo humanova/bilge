@@ -37,7 +37,7 @@ if IN_CELERY_WORKER_PROCESS:
 # for other sources, we will try to use their 'title's
 sources_with_inapplicable_titles = ['Twitter', 'Eksisozluk']
 sentence_ending_punctuations = ['.', '!', '?']
-ner_labels = ['DATE, EVENT, FAC, GPE, LANGUAGE, LAW, LOC, MONEY, NORP, ORG, PERSON, PRODUCT, TIME, WORK_OF_ART']
+#ner_labels = ['DATE, EVENT, FAC, GPE, LANGUAGE, LAW, LOC, MONEY, NORP, ORG, PERSON, PRODUCT, TIME, WORK_OF_ART']
 
 def fix_sentence_ending(text):
     new_text = text
@@ -108,9 +108,9 @@ def calculate_and_insert_named_entities(posts):
                 analyzer = en_ner_analyzer if p['language'] == 'en' else tr_ner_analyzer
                 entities = analyzer.get_named_entities(text)
                 for entity in entities:
-                    if entity['label'] in ner_labels:
-                        entity['post_id'] = p['id']
-                        ner_data.append(entity)
+                    #if entity['label'] in ner_labels:
+                    entity['post_id'] = p['id']
+                    ner_data.append(entity)
             except Exception as e:
                 logging.warning(f'[Bilge:Tasks] Could not find the named entities : {e}\ncurrent post data : {p}')
                 traceback.print_tb(e.__traceback__)
