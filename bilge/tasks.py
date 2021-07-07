@@ -94,19 +94,21 @@ def calculate_and_insert_named_entities(posts):
         if p['language'] is None or p['language'] == 'tr':
             continue
 
+        sequence = ""
         # if 'title' and 'text' are applicable for nlp, then use both by concatenating
+        # if only 'title' is applicable then use 'title'
+        title = preprocess(p['title']).strip()
         text = preprocess(p['text']).strip()
-        if len(text) != 0 and p['source'] not in sources_with_inapplicable_titles:
-            text = fix_sentence_ending(text)
-            title = preprocess(p['title']).strip()
-            if len(title) != 0:
-                title = fix_sentence_ending(title)
-                text = title + text
-
-        if len(text) > 0:
+        
+        if len(title) != 0 and p['source'] not in sources_with_inapplicable_titles:
+            sequence += fix_sentence_ending(title)
+        if len(text) != 0:
+            sequence += text
+            
+        if len(sequence) > 0:
             try:
                 analyzer = en_ner_analyzer if p['language'] == 'en' else tr_ner_analyzer
-                entities = analyzer.get_named_entities(text)
+                entities = analyzer.get_named_entities(sequence)
                 for entity in entities:
                     #if entity['label'] in ner_labels:
                     entity['post_id'] = p['id']
