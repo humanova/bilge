@@ -29,6 +29,6 @@ Sentiment Analysis
 - [savasy/bert-base-turkish-sentiment-cased](https://huggingface.co/savasy/bert-base-turkish-sentiment-cased) (Turkish)
 
 Named Entity Recognition
-- [Spacy's "en_core_web_trf"] (https://spacy.io/models/en#en_core_web_trf) (English)
+- [Spacy's "en_core_web_trf"](https://spacy.io/models/en#en_core_web_trf) (English)
 
 
