@@ -6,8 +6,14 @@ Using Redis pub/sub channels to recieve posts, PostgreSQL to store the analysis 
 
 Altough easily modifiable, bilge has minimal 'data cleaning' features. This service was built according to my OSINT projects needs.
 
-## Configuration 
 
+![metabase dashboard 1](media/metabase_dashboard_1.png)
+Examining the average monthly sentiment of posts in English that mention 'Bitcoin'.
+![metabase dashboard 2](media/metabase_dashboard_2.png)
+
+Sample visualizations of news analysed between January-November 2021, in my Metabase dashboard. 
+
+## Configuration 
 Sample config file (config.json)
 ```json
 {
