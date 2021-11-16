@@ -9,8 +9,8 @@ Altough easily modifiable, bilge has minimal 'data cleaning' features. This serv
 
 ![metabase dashboard 1](media/metabase_dashboard_1.png)
 Examining the average monthly sentiment of posts in English that mention 'Bitcoin'.
-![metabase dashboard 2](media/metabase_dashboard_2.png)
 
+![metabase dashboard 2](media/metabase_dashboard_2.png)
 Sample visualizations of news analysed between January-November 2021, in my Metabase dashboard. 
 
 ## Configuration 
