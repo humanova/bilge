@@ -2,9 +2,9 @@
 
 Bilge is an NLP analysis service, specifically built to run NER and Sentiment Analysis models on posts scraped using [mergen](https://github.com/humanova/mergen).
 
-Using Redis pub/sub channels to recieve posts, PostgreSQL to store the analysis results. Redis is also used as a Message Broker to schedule NLP tasks for bilge workers to process. 
+Using Redis pub/sub channels to recieve posts, PostgreSQL to store the analysis results. Redis is also used to schedule NLP tasks for bilge workers to process. 
 
-Altough easily modifiable, bilge has minimal 'data cleaning' features. This service was built according to my OSINT projects needs.
+Altough easily modifiable, bilge has minimal 'data cleaning' features. This service was built according to the needs of my OSINT project.
 
 
 ![metabase dashboard 1](media/metabase_dashboard_1.png)
