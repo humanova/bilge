@@ -7,6 +7,8 @@ Using Redis pub/sub channels to recieve posts, PostgreSQL to store the analysis 
 Altough easily modifiable, bilge has minimal 'data cleaning' features. This service was built according to my OSINT projects needs.
 
 ## Configuration 
+
+Sample config file (config.json)
 ```json
 {
     "db_name" : "posts",
@@ -23,10 +25,10 @@ Altough easily modifiable, bilge has minimal 'data cleaning' features. This serv
 ## Models in use
 
 Sentiment Analysis 
-- cardiffnlp/twitter-roberta-base-sentiment (English)
-- savasy/bert-base-turkish-sentiment-cased (Turkish)
+- [cardiffnlp/twitter-roberta-base-sentiment] (https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) (English)
+- [savasy/bert-base-turkish-sentiment-cased] (https://huggingface.co/savasy/bert-base-turkish-sentiment-cased) (Turkish)
 
 Named Entity Recognition
-- Spacy's "en_core_web_trf"
+- [Spacy's "en_core_web_trf"] (https://spacy.io/models/en#en_core_web_trf) (English)
 
 
