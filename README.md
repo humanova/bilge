@@ -25,8 +25,8 @@ Sample config file (config.json)
 ## Models in use
 
 Sentiment Analysis 
-- [cardiffnlp/twitter-roberta-base-sentiment] (https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) (English)
-- [savasy/bert-base-turkish-sentiment-cased] (https://huggingface.co/savasy/bert-base-turkish-sentiment-cased) (Turkish)
+- [cardiffnlp/twitter-roberta-base-sentiment](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment) (English)
+- [savasy/bert-base-turkish-sentiment-cased](https://huggingface.co/savasy/bert-base-turkish-sentiment-cased) (Turkish)
 
 Named Entity Recognition
 - [Spacy's "en_core_web_trf"] (https://spacy.io/models/en#en_core_web_trf) (English)
